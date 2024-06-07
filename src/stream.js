@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { List } from 'immutable';
 import mitt from 'mitt';
 import { convertBufferToLines, bufferConcat } from './utils';

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 import { Component, Fragment } from 'react';
 import {
   any,
@@ -182,6 +184,10 @@ export default class LazyLog extends Component {
      * Flag to enable/disable case insensitive search
      */
     caseInsensitive: bool,
+    /**
+     * Flag to enable/disable the scroll
+     */
+    preventScroll: bool,
   };
 
   static defaultProps = {
@@ -213,6 +219,7 @@ export default class LazyLog extends Component {
     lineClassName: '',
     highlightLineClassName: '',
     caseInsensitive: false,
+    preventScroll: false,
   };
 
   static getDerivedStateFromProps(
@@ -223,6 +230,7 @@ export default class LazyLog extends Component {
       rowHeight,
       url: nextUrl,
       text: nextText,
+      preventScroll,
     },
     {
       count,
@@ -242,7 +250,7 @@ export default class LazyLog extends Component {
       (nextText && nextText !== previousText);
 
     return {
-      scrollToIndex: newScrollToIndex,
+      scrollToIndex: preventScroll ? scrollToIndex : newScrollToIndex,
       lineLimit: Math.floor(BROWSER_PIXEL_LIMIT / rowHeight),
       highlight: highlight
         ? getHighlightRange(highlight)
@@ -362,7 +370,13 @@ export default class LazyLog extends Component {
 
   handleUpdate = ({ lines: moreLines, encodedLog }) => {
     this.encodedLog = encodedLog;
-    const { scrollToLine, follow, stream, websocket } = this.props;
+    const {
+      scrollToLine,
+      follow,
+      stream,
+      websocket,
+      preventScroll,
+    } = this.props;
     const { lineLimit, count: previousCount } = this.state;
     let offset = 0;
     let lines = (this.state.lines || List()).concat(moreLines);
@@ -374,7 +388,7 @@ export default class LazyLog extends Component {
       count = lines.count();
     }
 
-    const scrollToIndex = getScrollIndex({
+    const newScrollToIndex = getScrollIndex({
       follow,
       scrollToLine,
       previousCount,
@@ -386,7 +400,9 @@ export default class LazyLog extends Component {
       lines,
       offset,
       count,
-      scrollToIndex,
+      scrollToIndex: preventScroll
+        ? this.state.scrollToIndex
+        : newScrollToIndex,
     });
 
     if (stream || websocket) {

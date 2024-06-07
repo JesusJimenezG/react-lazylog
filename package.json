@@ -1,9 +1,8 @@
 {
-  "name": "react-lazylog",
-  "version": "4.5.3",
+  "name": "@jesusjimenezg/react-lazylog",
+  "version": "4.5.3-9",
   "description": "React Lazy Logviewer",
   "license": "MPL-2.0",
-  "repository": "mozilla-frontend-infra/react-lazylog",
   "main": "build/index.js",
   "files": [
     "build",
@@ -27,7 +26,7 @@
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
-    "gh-pages": "^1.1.0",
+    "gh-pages": "^6.1.1",
     "neutrino": "^8.2.1",
     "neutrino-preset-mozilla-frontend-infra": "^4.1.0",
     "react": "^16.3.1",
